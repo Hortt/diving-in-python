@@ -1,0 +1,2 @@
+class InvalidFile(BaseException):
+    pass
