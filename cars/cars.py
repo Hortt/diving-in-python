@@ -134,6 +134,26 @@ class SpecMachineDataExtractor(BaseCarDataExtractor):
         self.arguments.append(self.input_data['extra'])
 
 
+class CSVParser:
+    def __init__(self, filename=None):
+        csv.register_dialect('semicolon-delimited', delimiter=';')
+        self.filename = filename or 'cars.csv'
+
+    def items(self):
+        with open(self.filename) as csvfile:
+            reader = csv.DictReader(csvfile, dialect='semicolon-delimited')
+            for row in reader:
+                if self.item_is_valid(row):
+                    yield row
+
+    @staticmethod
+    def item_is_valid(row):
+        for val in row.values():
+            if val:
+                return True
+        return False
+
+
 CAR_TYPE_MAP = {
     'car': PassengerCar,
     'truck': Truck,
@@ -147,41 +167,37 @@ CAR_TYPE_DATA_EXTRACTOR_MAP = {
 }
 
 
-class CSVParser:
-    def __init__(self, filename=None):
-        csv.register_dialect('semicolon-delimited', delimiter=';')
-        self.filename = filename or 'cars.csv'
+class CarList:
 
-    def rows(self):
-        with open(self.filename) as csvfile:
-            reader = csv.DictReader(csvfile, dialect='semicolon-delimited')
-            for row in reader:
-                if self.row_is_valid(row):
-                    yield row
+    data_provider = CSVParser
+
+    def __init__(self):
+        self.file = sys.argv[1] if len(sys.argv) > 1 else None
+        self.car_list = []
+        self.get_list()
 
     @staticmethod
-    def row_is_valid(row):
-        for val in row.values():
-            if val:
-                return True
-        return False
+    def get_car_model_by_type(car_type):
+        return CAR_TYPE_MAP[car_type]
 
+    @staticmethod
+    def get_car_data_extractor_by_type(car_type):
+        return CAR_TYPE_DATA_EXTRACTOR_MAP[car_type]
 
-def get_car_list():
-    file = sys.argv[1] if len(sys.argv) > 1 else None
-    car_list = []
-    for car_data in CSVParser(file).rows():
-        car_list.append(
-            CAR_TYPE_MAP[car_data['car_type']](
-                *CAR_TYPE_DATA_EXTRACTOR_MAP[car_data['car_type']](car_data).arguments
+    def get_list(self):
+        for car_data in self.data_provider(self.file).items():
+            car_model = self.get_car_model_by_type(car_data['car_type'])
+            car_data_extractor = self.get_car_data_extractor_by_type(car_data['car_type'])
+            self.car_list.append(
+                car_model(*car_data_extractor(car_data).arguments)
             )
-        )
 
-    print(car_list)
+    def print(self):
+        print(self.car_list)
 
 
 def main():
-    get_car_list()
+    CarList().print()
 
 
 if __name__ == "__main__":
