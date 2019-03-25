@@ -177,7 +177,7 @@ class CarList:
         self.get_list()
 
     @staticmethod
-    def get_car_model_by_type(car_type):
+    def get_car_model_by_type(car_type: str):
         return CAR_TYPE_MAP[car_type]
 
     @staticmethod
@@ -193,7 +193,8 @@ class CarList:
             )
 
     def print(self):
-        print(self.car_list)
+        for car in self.car_list:
+            print(car)
 
 
 def main():
