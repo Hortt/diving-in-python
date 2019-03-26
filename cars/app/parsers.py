@@ -1,5 +1,7 @@
 import csv
+
 from .exceptions import InvalidFile
+
 
 class CSVParser:
     def __init__(self, filename=None):

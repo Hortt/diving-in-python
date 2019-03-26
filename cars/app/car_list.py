@@ -1,8 +1,8 @@
 import sys
 
-from .parsers import CSVParser
 from .extractors import PassengerCarDataExtractor, TruckDataExtractor, SpecMachineDataExtractor
 from .models import PassengerCar, Truck, SpecMachine
+from .parsers import CSVParser
 
 CAR_TYPE_MAP = {
     'car': PassengerCar,
@@ -17,7 +17,6 @@ CAR_TYPE_DATA_EXTRACTOR_MAP = {
 
 
 class CarList:
-
     data_provider = CSVParser
 
     def __init__(self):
