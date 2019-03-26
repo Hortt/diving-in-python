@@ -1,0 +1,31 @@
+-   repo: https://github.com/Lucas-C/pre-commit-hooks-safety
+    sha: v1.1.0
+    hooks:
+    -   id: python-safety-dependencies-check
+        files: requirements
+
+
+- repo: git://github.com/FalconSocial/pre-commit-python-sorter
+  sha: 1.0.4
+  hooks:
+  - id: python-import-sorter
+    args: ['--silent-overwrite']
+    exclude: migrations|settings
+
+-   repo: local
+    hooks:
+    -   id: git-pylint-commit-hook
+        name: pylint
+        entry: bash -ec 'git-pylint-commit-hook --ignore=migrations'
+        language: system
+        files: \.py$
+
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    sha: v0.9.1
+    hooks:
+    -   id: autopep8-wrapper
+        exclude: migrations|settings
+        args:
+        - --max-line-length=120
+        - --in-place
+    -   id: check-ast

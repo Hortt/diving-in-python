@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+HOOKS_DIR=`git rev-parse --git-dir`/hooks
+VENV_DIR=${HOOKS_DIR}/hooks_venv
+
+. ${VENV_DIR}/bin/activate
+pip install -r requirements.txt > git_hooks.log
+/bin/bash ${HOOKS_DIR}/yelp-pre-commit.sh
