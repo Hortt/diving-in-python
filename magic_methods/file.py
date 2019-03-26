@@ -11,7 +11,8 @@ class File:
         return self.file
 
     def __add__(self, other):
-        new_file_path = os.path.join(tempfile.gettempdir(), self.filename+other.filename)
+        new_file_path = os.path.join(tempfile.gettempdir(),
+                                     self.filename+other.filename)
         with open(new_file_path, 'w') as new_file:
             new_file.write(self.content)
             new_file.write(other.content)
@@ -46,6 +47,7 @@ class File:
 
 
 if __name__ == '__main__':
-    file = File('/home/user/PycharmProjects/diving-in-python/magic_methods/Readme.md')
+    file = File(
+        '/home/user/PycharmProjects/diving-in-python/magic_methods/Readme.md')
     for _line in file:
         print(_line)
