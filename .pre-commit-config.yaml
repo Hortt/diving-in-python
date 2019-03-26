@@ -17,3 +17,6 @@
     sha: HEAD
     hooks:
     -   id: autopep8
+        exclude: migrations|settings
+        args:
+        - --max-line-length=1320
